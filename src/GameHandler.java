@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -16,11 +17,12 @@ import javax.swing.Timer;
 
 
 public class GameHandler extends JPanel implements ActionListener, KeyListener{
-	public static final int WIDTH = 800;
-	public static final int HEIGHT = 600;
+	public static final int WIDTH = 1024;
+	public static final int HEIGHT = 768;
 	
 	JFrame window;
 	Timer timer;
+	Random gen = new Random();
 	
 	Player p1 = new Player(50, 50, 100, 100);
 	
@@ -40,11 +42,11 @@ public class GameHandler extends JPanel implements ActionListener, KeyListener{
 		window.pack();
 		timer = new Timer(1000 / 60, this);
 		
-		
-		platforms.add(new Platform(300, 450, 200, 50));
-		platforms.add(new Platform(500, 350, 200, 50));
-		platforms.add(new Platform(300, 250, 200, 50));
-		platforms.add(new Platform(100, 150, 200, 50));
+		for (int i = 0; i < 4; i++) {
+			int x = gen.nextInt(WIDTH);
+			int y = gen.nextInt(HEIGHT);
+			platforms.add(new Platform(x, y, 200, 50));
+		}
 		
 		timer.start();
 		
