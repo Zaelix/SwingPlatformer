@@ -2,30 +2,19 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
-class Platform{
-	private int x;
-	private int y;
-	private int width;
-	private int height;
-	
-	private Rectangle cBox = new Rectangle();
+class Platform extends GameObject{
 	
 	public Platform(int x, int y, int w, int h){
-		this.x = x;
-		this.y = y;
-		this.width = w;
-		this.height = h;
-		
-		cBox.setBounds(x, y, width, height);
+		super(x, y, w, h);
 	}
 	
 	public void update(){
-		cBox.setBounds(x, y, width, height);
+		cBox.setBounds(x, y, this.getWidth(), this.getHeight());
 	}
 	
 	public void draw(Graphics g){
 		g.setColor(Color.GREEN);
-		g.fillRect(x, y, width, height);
+		g.fillRect(x, y, this.getWidth(), this.getHeight());
 	}
 	
 	public Rectangle getCBox(){

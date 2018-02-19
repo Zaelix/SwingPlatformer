@@ -2,13 +2,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
-class Player{
-	private int x;
-	private int y;
-	private int width;
-	private int height;
+class Player extends GameObject{
 	
-	private Rectangle cBox = new Rectangle();
 	
 	public boolean left = false;
 	public boolean right = false;
@@ -24,12 +19,7 @@ class Player{
 	boolean canJump = false;
 	
 	public Player(int x, int y, int w, int h){
-		this.x = x;
-		this.y = y;
-		this.width = w;
-		this.height = h;
-		
-		cBox.setBounds(x, y, width, height);
+		super(x, y, w, h);
 	}
 	
 	public void jump(){
@@ -56,36 +46,16 @@ class Player{
 			canJump = true;
 		}
 		
-		cBox.setBounds(x, y, width, height);
+		cBox.setBounds(x, y, this.getWidth(), this.getHeight());
 	}
 	
 	public void draw(Graphics g){
 		g.setColor(Color.BLUE);
-		g.fillRect(x, y, width, height);
-	}
-	
-	public Rectangle getCBox(){
-		return cBox;
+		g.fillRect(x, y, this.getWidth(), this.getHeight());
 	}
 	
 	public void setYLimit(int l){
 		yLimit = l;
-	}
-	
-	public int getX(){
-		return x;
-	}
-	
-	public int getY(){
-		return y;
-	}
-	
-	public int getWidth(){
-		return width;
-	}
-	
-	public int getHeight(){
-		return height;
 	}
 	
 	public int getYVelocity(){

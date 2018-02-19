@@ -71,6 +71,10 @@ public class GameHandler extends JPanel implements ActionListener, KeyListener{
 		
 	}
 	
+	private boolean checkCollides(Player plyr, Platform plat) {
+		return false;
+	}
+	
 	private boolean checkCollision(){
 		for(Platform p: platforms){
 			if(p1.getCBox().intersects(p.getCBox())){
