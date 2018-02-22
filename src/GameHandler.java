@@ -24,7 +24,7 @@ public class GameHandler extends JPanel implements ActionListener, KeyListener{
 	Timer timer;
 	Random gen = new Random();
 	
-	Player p1 = new Player(50, 50, 100, 100);
+	Player p1 = new Player(this, 50, 50, 100, 100);
 	
 	ArrayList<Platform> platforms = new ArrayList<Platform>();
 	
@@ -45,7 +45,7 @@ public class GameHandler extends JPanel implements ActionListener, KeyListener{
 		for (int i = 0; i < 4; i++) {
 			int x = gen.nextInt(WIDTH);
 			int y = gen.nextInt(HEIGHT);
-			platforms.add(new Platform(x, y, 200, 50));
+			platforms.add(new Platform(this, x, y, 200, 50));
 		}
 		
 		timer.start();
@@ -61,7 +61,7 @@ public class GameHandler extends JPanel implements ActionListener, KeyListener{
 	}
 	
 	public void actionPerformed(ActionEvent e){
-		checkCollision();
+		//checkCollision();
 		
 		p1.update();
 		
@@ -73,29 +73,49 @@ public class GameHandler extends JPanel implements ActionListener, KeyListener{
 		
 	}
 	
-	private boolean checkCollides(Player plyr, Platform plat) {
-		return false;
-	}
-	
-	private boolean checkCollision(){
+	public boolean checkForCollisions(Rectangle nf){
 		for(Platform p: platforms){
-			if(p1.getCBox().intersects(p.getCBox())){
-				handleCollision(p);
+			if(nf.intersects(p.getCBox())){
 				return true;
 			}
 		}
 		
-		p1.setYLimit(500);
-		return false;
+		p1.setYLimit(HEIGHT-p1.getHeight());
+ 		return false;
 	}
 	
-	private void handleCollision(Platform p){
-		if(p1.getYVelocity() >= 0 && p1.getY() + p1.getHeight() < p.getY() + 25){
-			p1.setYLimit(p.getY() - p1.getHeight());
-		}else{
-			p1.setYLimit(500);
+	private String GetCollidingSideOfPlayer(Player plyr, Platform plat) {
+		if(plyr.getX() >= plat.getX() && plyr.getY() >= plat.getY()+plat.getHeight()) {
+			return "Top";
 		}
+		return "Side";
 	}
+	
+	private void getClosestClearSpace() {
+		
+	}
+	
+	
+	
+//	private boolean checkCollision(){
+//		for(Platform p: platforms){
+//			if(p1.getCBox().intersects(p.getCBox())){
+//				handleCollision(p);
+//				return true;
+//			}
+//		}
+//		
+//		p1.setYLimit(HEIGHT-p1.getHeight());
+// 		return false;
+//	}
+//	
+//	private void handleCollision(Platform p){
+//		if(p1.getYVelocity() >= 0 && p1.getY() + p1.getHeight() < p.getY() + 25){
+//			p1.setYLimit(p.getY() - p1.getHeight());
+//		}else{
+//			p1.setYLimit(HEIGHT);
+//		}
+//	}
 	
 	@Override
 	public void keyTyped(KeyEvent e) {
@@ -106,13 +126,13 @@ public class GameHandler extends JPanel implements ActionListener, KeyListener{
 	public void keyPressed(KeyEvent e) {
 		
 		if(e.getKeyCode() == KeyEvent.VK_LEFT){
-			p1.left = true;
+			p1.setXVelocity(-5);
 		}
-		if(e.getKeyCode() == KeyEvent.VK_RIGHT){
-			p1.right = true;
+		else if(e.getKeyCode() == KeyEvent.VK_RIGHT){
+			p1.setXVelocity(5);
 		}
 
-		if(e.getKeyCode() == KeyEvent.VK_SPACE){
+		if(e.getKeyCode() == KeyEvent.VK_SPACE || e.getKeyCode() == KeyEvent.VK_UP){
 			p1.jump();
 		}
 		
@@ -125,11 +145,8 @@ public class GameHandler extends JPanel implements ActionListener, KeyListener{
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
-		if(e.getKeyCode() == KeyEvent.VK_LEFT){
-			p1.left = false;
-		}
-		if(e.getKeyCode() == KeyEvent.VK_RIGHT){
-			p1.right = false;
+		if(e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_RIGHT){
+			p1.setXVelocity(0);
 		}
 	}
 }

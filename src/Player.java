@@ -8,7 +8,7 @@ class Player extends GameObject{
 	public boolean left = false;
 	public boolean right = false;
 	
-	private int xVelocity = 5;
+	private int xVelocity = 0;
 	
 	private int gravity = 1;
 	private int yVelocity = 0;
@@ -16,42 +16,55 @@ class Player extends GameObject{
 	
 	private int yLimit = 500;
 
-	boolean canJump = false;
+	boolean isOnGround = false;
 	
-	public Player(int x, int y, int w, int h){
-		super(x, y, w, h);
+	public Player(GameHandler gh, int x, int y, int w, int h){
+		super(gh, x, y, w, h);
 	}
 	
 	public void jump(){
-		if(canJump){
+		if(isOnGround){
 			yVelocity -= jumpPower;
-			canJump = false;
+			isOnGround = false;
 		}
 	}
 	
 	public void update(){
-		if(left){
-			x -= xVelocity;
-		}
-		if(right){
-			x += xVelocity;
-		}
-		
-		yVelocity += gravity;
-		y += yVelocity;
+		this.move();
 		
 		if(y >= yLimit + 1){
 			y = yLimit + 1;
 			yVelocity = 0;
-			canJump = true;
+			isOnGround = true;
 		}
 		
-		cBox.setBounds(x, y, this.getWidth(), this.getHeight());
+		collider.setBounds(x, y, this.getWidth(), this.getHeight());
 	}
 	
 	public void draw(Graphics g){
 		g.setColor(Color.BLUE);
 		g.fillRect(x, y, this.getWidth(), this.getHeight());
+	}
+	
+	public void move() {
+		
+		yVelocity += gravity;
+		Rectangle nextFrame = new Rectangle(x+xVelocity, y+yVelocity, this.getWidth(), this.getHeight());
+		if(gh.checkForCollisions(nextFrame)) {
+			stopMoving();
+		}
+		x += xVelocity;
+		y += yVelocity;
+		
+	}
+	
+	public void setXVelocity(int v) {
+		this.xVelocity = v;
+	}
+	
+	public void stopMoving() {
+		this.xVelocity = 0;
+		this.yVelocity = 0;
 	}
 	
 	public void setYLimit(int l){

@@ -1,20 +1,22 @@
 import java.awt.Rectangle;
 
 public class GameObject {
+	public GameHandler gh;
 	public int x;
 	public int y;
 	private int width;
 	private int height;
 	
-	public Rectangle cBox = new Rectangle();
+	public Rectangle collider = new Rectangle();
 	
-	public GameObject(int x, int y, int w, int h){
+	public GameObject(GameHandler handler, int x, int y, int w, int h){
+		this.gh = handler;
 		this.x = x;
 		this.y = y;
 		this.width = w;
 		this.height = h;
 		
-		this.cBox.setBounds(x, y, width, height);
+		this.collider.setBounds(x, y, width, height);
 	}
 	
 	public int getWidth() {
@@ -33,6 +35,6 @@ public class GameObject {
 	}
 	
 	public Rectangle getCBox(){
-		return cBox;
+		return collider;
 	}
 }
