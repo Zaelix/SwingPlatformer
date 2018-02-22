@@ -23,20 +23,22 @@ class Player extends GameObject{
 	}
 	
 	public void jump(){
-		if(isOnGround){
-			yVelocity -= jumpPower;
-			isOnGround = false;
+		if(isOnGround) {
+			yVelocity = -jumpPower;
+		}
+		else {
+			yVelocity = 0;
 		}
 	}
 	
 	public void update(){
 		this.move();
 		
-		if(y >= yLimit + 1){
-			y = yLimit + 1;
-			yVelocity = 0;
-			isOnGround = true;
-		}
+//		if(y >= yLimit + 1){
+//			y = yLimit + 1;
+//			yVelocity = 0;
+//			isOnGround = true;
+//		}
 		
 		collider.setBounds(x, y, this.getWidth(), this.getHeight());
 	}
@@ -48,14 +50,27 @@ class Player extends GameObject{
 	
 	public void move() {
 		
-		yVelocity += gravity;
-		Rectangle nextFrame = new Rectangle(x+xVelocity, y+yVelocity, this.getWidth(), this.getHeight());
-		if(gh.checkForCollisions(nextFrame)) {
-			stopMoving();
-		}
-		x += xVelocity;
-		y += yVelocity;
 		
+		x += xVelocity;
+		if(!this.isGrounded()) {
+			gravity++;
+			y += yVelocity + gravity;
+		}
+		else {
+			gravity = 1;
+			y += yVelocity;
+		}
+		
+	}
+	
+	public boolean isGrounded() {
+		Rectangle nextFrame = new Rectangle(x, y+1, this.getWidth(), this.getHeight());
+		if(gh.checkForCollisions(nextFrame)) {
+			isOnGround = true;
+			return true;
+		}
+		isOnGround = false;
+		return false;
 	}
 	
 	public void setXVelocity(int v) {
