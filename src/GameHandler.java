@@ -41,6 +41,8 @@ public class GameHandler extends JPanel implements ActionListener, KeyListener{
 		window.setVisible(true);
 		window.pack();
 		timer = new Timer(1000 / 60, this);
+
+		platforms.add(new Platform(this, 0, 400, 200, 50));
 		
 		for (int i = 0; i < 4; i++) {
 			int x = gen.nextInt(WIDTH);
@@ -53,6 +55,7 @@ public class GameHandler extends JPanel implements ActionListener, KeyListener{
 	}
 	
 	public void paintComponent(Graphics g){
+		g.clearRect(0, 0, WIDTH, HEIGHT);
 		p1.draw(g);
 		
 		for(Platform p : platforms){
