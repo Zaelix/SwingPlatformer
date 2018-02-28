@@ -40,7 +40,7 @@ public class GameHandler extends JPanel implements ActionListener, KeyListener{
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setVisible(true);
 		window.pack();
-		timer = new Timer(1000 / 60, this);
+		timer = new Timer(10, this);
 
 		platforms.add(new Platform(this, 0, 400, 200, 50));
 		
@@ -64,7 +64,6 @@ public class GameHandler extends JPanel implements ActionListener, KeyListener{
 	}
 	
 	public void actionPerformed(ActionEvent e){
-		//checkCollision();
 		
 		p1.update();
 		
@@ -83,42 +82,18 @@ public class GameHandler extends JPanel implements ActionListener, KeyListener{
 			}
 		}
 		
-		p1.setYLimit(HEIGHT-p1.getHeight());
  		return false;
 	}
 	
-	private String GetCollidingSideOfPlayer(Player plyr, Platform plat) {
-		if(plyr.getX() >= plat.getX() && plyr.getY() >= plat.getY()+plat.getHeight()) {
-			return "Top";
-		}
-		return "Side";
-	}
-	
-	private void getClosestClearSpace() {
+	private void getClosestClearSpace(Rectangle p, Rectangle o) {
+		int m = p.x - o.x;
 		
+		int totalWidths = p.width + o.width;
 	}
 	
 	
 	
-//	private boolean checkCollision(){
-//		for(Platform p: platforms){
-//			if(p1.getCBox().intersects(p.getCBox())){
-//				handleCollision(p);
-//				return true;
-//			}
-//		}
-//		
-//		p1.setYLimit(HEIGHT-p1.getHeight());
-// 		return false;
-//	}
-//	
-//	private void handleCollision(Platform p){
-//		if(p1.getYVelocity() >= 0 && p1.getY() + p1.getHeight() < p.getY() + 25){
-//			p1.setYLimit(p.getY() - p1.getHeight());
-//		}else{
-//			p1.setYLimit(HEIGHT);
-//		}
-//	}
+
 	
 	@Override
 	public void keyTyped(KeyEvent e) {
@@ -137,6 +112,7 @@ public class GameHandler extends JPanel implements ActionListener, KeyListener{
 
 		if(e.getKeyCode() == KeyEvent.VK_SPACE || e.getKeyCode() == KeyEvent.VK_UP){
 			p1.jump();
+			p1.setIsJumping(true);
 		}
 		
 		if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
@@ -151,5 +127,9 @@ public class GameHandler extends JPanel implements ActionListener, KeyListener{
 		if(e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_RIGHT){
 			p1.setXVelocity(0);
 		}
+		if(e.getKeyCode() == KeyEvent.VK_SPACE || e.getKeyCode() == KeyEvent.VK_UP){
+			p1.setIsJumping(false);
+		}
+		
 	}
 }
