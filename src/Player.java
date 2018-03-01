@@ -10,22 +10,20 @@ class Player extends GameObject{
 	
 	private int xVelocity = 0;
 	
-	private int gravity = 1;
 	private int yVelocity = 0;
-	private int jumpPower = 20;
-	
-	private int yLimit = 500;
+	private int jumpPower = -40;
 
-	boolean isJumping = false;
+	boolean isColliding = false;
 	
 	public Player(GameHandler gh, int x, int y, int w, int h){
 		super(gh, x, y, w, h);
 	}
 	
 	public void jump(){
-		if(isGrounded()) {
-			yVelocity = -jumpPower;
+		if(yVelocity <= 0) {
+			yVelocity = jumpPower;
 		}
+		isColliding = true;
 	}
 	
 	public void update(){
@@ -42,46 +40,37 @@ class Player extends GameObject{
 	public void move() {
 		
 		x += xVelocity;
-		if(!this.isGrounded()) {
-			gravity++;
-			y += yVelocity + gravity;
+		y += yVelocity;
+		isColliding = isGrounded();
+		if(yVelocity < 15 && isColliding == false) {
+			yVelocity++;
 		}
-		else {
-			gravity = 1;
-			y += yVelocity;
+		if (isColliding) {
+			yVelocity = 0;
 		}
-		 if (!isJumping) {
-			 yVelocity = 0;
-		 }
-		
 	}
 	
 	public boolean isGrounded() {
-		Rectangle nextFrame = new Rectangle(x, y+1, this.getWidth(), this.getHeight());
-		if(gh.checkForCollisions(this.getCBox())) {
+		if(gh.checkForCollisions(this)) {
+			//System.out.println("Colliding! " + yVelocity);
 			return true;
 		}
-		//isOnGround = false;
 		return false;
+	}
+	
+	public void rectifyCollision(Rectangle newLocRec) {
+		this.x = newLocRec.x;
+		this.y = newLocRec.y;
 	}
 	
 	public void setXVelocity(int v) {
 		this.xVelocity = v;
 	}
 	
-	public void stopMoving() {
-		this.xVelocity = 0;
-		this.yVelocity = 0;
-	}
-	
-	public void setYLimit(int l){
-		yLimit = l;
-	}
-	
 	public int getYVelocity(){
 		return yVelocity;
 	}
 	public void setIsJumping(boolean b) {
-		isJumping = b;
+		isColliding = b;
 	}
 }

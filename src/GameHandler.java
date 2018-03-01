@@ -75,9 +75,11 @@ public class GameHandler extends JPanel implements ActionListener, KeyListener{
 		
 	}
 	
-	public boolean checkForCollisions(Rectangle nf){
+	public boolean checkForCollisions(Player player){
+		Rectangle nf = player.getCBox();
 		for(Platform p: platforms){
 			if(nf.intersects(p.getCBox())){
+				player.rectifyCollision(getClosestClearSpace(nf, p.getCBox()));
 				return true;
 			}
 		}
@@ -85,10 +87,41 @@ public class GameHandler extends JPanel implements ActionListener, KeyListener{
  		return false;
 	}
 	
-	private void getClosestClearSpace(Rectangle p, Rectangle o) {
-		int m = p.x - o.x;
+	public Rectangle getClosestClearSpace(Rectangle p, Rectangle o) {
+		Rectangle answer = new Rectangle();
+		int dx = p.x - o.x;
+		int dy = p.y - o.y;
+		int changeX = 0;
+		int changeY = 0;
 		
-		int totalWidths = p.width + o.width;
+		// Getting the needed change in Y
+		if(p.y < o.y) {
+			changeY = dy + p.height;
+		}
+		else {
+			changeY = dy + o.height;
+		}
+		
+		// Getting the needed change in X
+		if(p.x > o.x) {
+			changeX = dx - p.width;
+		}
+		else {
+			changeX = dx - o.width;
+		}
+		
+		if (changeX < changeY) {
+			answer.x = p.x - changeX;
+			answer.y = p.y;
+		}
+		else {
+			answer.x = p.x;
+			answer.y = p.y + changeY;
+		}
+		answer.width = p.width;
+		answer.height = p.height;
+		
+		return answer;
 	}
 	
 	
@@ -112,7 +145,6 @@ public class GameHandler extends JPanel implements ActionListener, KeyListener{
 
 		if(e.getKeyCode() == KeyEvent.VK_SPACE || e.getKeyCode() == KeyEvent.VK_UP){
 			p1.jump();
-			p1.setIsJumping(true);
 		}
 		
 		if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
