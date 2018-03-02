@@ -91,32 +91,32 @@ public class GameHandler extends JPanel implements ActionListener, KeyListener{
 		Rectangle answer = new Rectangle();
 		int dx = p.x - o.x;
 		int dy = p.y - o.y;
-		int changeX = 0;
-		int changeY = 0;
+		int newX = 0;
+		int newY = 0;
 		
 		// Getting the needed change in Y
 		if(p.y < o.y) {
-			changeY = dy + p.height;
+			newY = o.y - p.height;
 		}
 		else {
-			changeY = dy + o.height;
+			newY = o.y - o.height;
 		}
 		
 		// Getting the needed change in X
-		if(p.x > o.x) {
-			changeX = dx - p.width;
+		if(p.x < o.x) {
+			newX = o.x - p.width;
 		}
 		else {
-			changeX = dx - o.width;
+			newX = o.x - o.width;
 		}
 		
-		if (changeX < changeY) {
-			answer.x = p.x - changeX;
+		if (newX < newY) {
+			answer.x = newX;
 			answer.y = p.y;
 		}
 		else {
 			answer.x = p.x;
-			answer.y = p.y + changeY;
+			answer.y = newY;
 		}
 		answer.width = p.width;
 		answer.height = p.height;
